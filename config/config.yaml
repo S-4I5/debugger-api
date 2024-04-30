@@ -4,4 +4,5 @@ http_server:
   idle_timeout: 60s
   name: "auth-server"
   base_path: "/api/v1"
-  address: ":8080"
+  host: ""
+  port: "8080"
