@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+
+  debugger-api:
+    build:
+      context: .
+      dockerfile: debugger-api.dockerfile
+    container_name: debugger-api_app_container

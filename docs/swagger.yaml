@@ -1,0 +1,105 @@
+basePath: /api/v1
+definitions:
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+      stackTrace:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: Api for http debugging
+  title: Debugger api
+  version: "1.0"
+paths:
+  /data/{id}:
+    delete:
+      description: Delete json by given key
+      parameters:
+      - description: Data key
+        in: path
+        name: key
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Deletes data
+      tags:
+      - data
+    get:
+      description: Returns json by given key
+      parameters:
+      - description: Data key
+        in: path
+        name: key
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Get data
+      tags:
+      - data
+    post:
+      consumes:
+      - application/json
+      description: Stores json by given key
+      parameters:
+      - description: Data key
+        in: path
+        name: key
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Creates data source
+      tags:
+      - data
+    put:
+      consumes:
+      - application/json
+      description: Updates json by given key
+      parameters:
+      - description: Data key
+        in: path
+        name: key
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Update data
+      tags:
+      - data
+swagger: "2.0"
