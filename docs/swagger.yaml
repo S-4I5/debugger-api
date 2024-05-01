@@ -1,8 +1,10 @@
 basePath: /api/v1
 definitions:
-  model.ErrorResponse:
+  error.ResponseDto:
     properties:
       error:
+        type: string
+      message:
         type: string
       stackTrace:
         type: string
@@ -30,11 +32,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
       summary: Deletes data
       tags:
       - data
@@ -54,11 +56,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
       summary: Get data
       tags:
       - data
@@ -78,7 +80,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
       summary: Creates data source
       tags:
       - data
@@ -98,7 +100,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/error.ResponseDto'
       summary: Update data
       tags:
       - data

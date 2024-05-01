@@ -39,10 +39,8 @@ func (c *Controller) PostData(cxt context.Context) http.HandlerFunc {
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
-				"",
-				w,
-				r,
-			)
+				"api.data.create.error",
+				w, r)
 			return
 		}
 

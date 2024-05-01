@@ -8,7 +8,12 @@ func NewMessageSource() *MessageSource {
 	handler := MessageSource{}
 
 	handler.messages = map[string]string{
-		"id": "Id",
+		"api.request.body.incorrect":  "Incorrect request body",
+		"api.request.param.incorrect": "Incorrect request param",
+		"api.data.create.error":       "Error while creating data",
+		"api.data.delete.error":       "Error while deleting data",
+		"api.data.get.error":          "Error while getting data",
+		"api.data.update.error":       "Error while updating data",
 	}
 
 	return &handler

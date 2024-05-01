@@ -8,7 +8,6 @@ import (
 )
 
 type Config struct {
-	Env        string `yaml:"env" env-required:"true"`
 	HTTPServer `yaml:"http_server"`
 }
 
@@ -17,7 +16,7 @@ type HTTPServer struct {
 	Port        string        `yaml:"port" env:"HOST" env-default:"8080"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"4s"`
 	IdleTimeout time.Duration `yaml:"idle-timeout" env-default:"60s"`
-	BasePath    string        `yaml:"base_path" env:"BASE_PATH" env-default:"/api/v1"`
+	ApiPrefix   string        `yaml:"api_prefix" env:"API_PREFIX" env-default:"/api/v1"`
 }
 
 func MustLoad(configPath string) Config {

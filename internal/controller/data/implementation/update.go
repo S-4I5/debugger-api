@@ -38,10 +38,8 @@ func (c *Controller) UpdateData(cxt context.Context) http.HandlerFunc {
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
-				"",
-				w,
-				r,
-			)
+				"api.data.update.error",
+				w, r)
 			return
 		}
 

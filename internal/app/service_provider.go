@@ -2,22 +2,22 @@ package app
 
 import (
 	"debugger-api/internal/config"
-	"debugger-api/internal/controller/data"
+	controller "debugger-api/internal/controller/data"
 	dataController "debugger-api/internal/controller/data/implementation"
 	"debugger-api/internal/error/message"
 	messageSource "debugger-api/internal/error/message/implementation"
 	"debugger-api/internal/error/response"
 	responseHandler "debugger-api/internal/error/response/implementaion"
-	data2 "debugger-api/internal/repository/data"
+	repository "debugger-api/internal/repository/data"
 	dataRepository "debugger-api/internal/repository/data/implementation"
-	data3 "debugger-api/internal/service/data"
+	service "debugger-api/internal/service/data"
 	dataService "debugger-api/internal/service/data/implementation"
 )
 
 type serviceProvider struct {
-	dataRepository data2.Repository
-	dataService    data3.Service
-	dataController data.Controller
+	dataRepository repository.Repository
+	dataService    service.Service
+	dataController controller.Controller
 	config         config.Config
 	errorHandler   response.Handler
 	messageSource  message.Source
@@ -29,7 +29,7 @@ func newServiceProvider() *serviceProvider {
 	}
 }
 
-func (s *serviceProvider) DataRepository() data2.Repository {
+func (s *serviceProvider) DataRepository() repository.Repository {
 	if s.dataRepository == nil {
 		s.dataRepository = dataRepository.NewRepository()
 	}
@@ -37,7 +37,7 @@ func (s *serviceProvider) DataRepository() data2.Repository {
 	return s.dataRepository
 }
 
-func (s *serviceProvider) DataService() data3.Service {
+func (s *serviceProvider) DataService() service.Service {
 	if s.dataService == nil {
 		s.dataService = dataService.NewDataService(s.DataRepository())
 	}
@@ -45,7 +45,7 @@ func (s *serviceProvider) DataService() data3.Service {
 	return s.dataService
 }
 
-func (s *serviceProvider) DataController() data.Controller {
+func (s *serviceProvider) DataController() controller.Controller {
 	if s.dataController == nil {
 		s.dataController = dataController.NewDataController(s.DataService(), s.ErrorHandler())
 	}

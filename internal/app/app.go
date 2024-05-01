@@ -40,12 +40,12 @@ func (a *App) setupHttpServer(ctx context.Context) {
 
 	router.Use(compressor.Handler)
 
-	basePath := a.serviceProvider.config.BasePath
+	prefix := a.serviceProvider.config.ApiPrefix
 
-	router.Get(basePath+"/data/{key}", a.serviceProvider.dataController.GetData(ctx))
-	router.Post(basePath+"/data/{key}", a.serviceProvider.dataController.PostData(ctx))
-	router.Put(basePath+"/data/{key}", a.serviceProvider.dataController.UpdateData(ctx))
-	router.Delete(basePath+"/data/{key}", a.serviceProvider.dataController.DeleteData(ctx))
+	router.Get(prefix+"/data/{key}", a.serviceProvider.dataController.GetData(ctx))
+	router.Post(prefix+"/data/{key}", a.serviceProvider.dataController.PostData(ctx))
+	router.Put(prefix+"/data/{key}", a.serviceProvider.dataController.UpdateData(ctx))
+	router.Delete(prefix+"/data/{key}", a.serviceProvider.dataController.DeleteData(ctx))
 
 	router.Get("/swagger/*", httpSwagger.WrapHandler) //The url pointing to API definition
 

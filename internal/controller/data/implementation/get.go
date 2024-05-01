@@ -38,10 +38,8 @@ func (c *Controller) GetData(ctx context.Context) http.HandlerFunc {
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
-				"",
-				w,
-				r,
-			)
+				"api.data.get.error",
+				w, r)
 			return
 		}
 

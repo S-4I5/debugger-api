@@ -1,5 +1,8 @@
 FROM golang:1.21.8-alpine AS builder
 
+RUN apk  update && \
+    apk  add --no-cache gcc g++ libc-dev
+
 WORKDIR /build
 
 ADD ../go.mod .

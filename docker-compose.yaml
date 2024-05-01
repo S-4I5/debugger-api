@@ -5,5 +5,5 @@ services:
   debugger-api:
     build:
       context: .
-      dockerfile: debugger-api.dockerfile
+      dockerfile: ./deployment/debugger-api.dockerfile
     container_name: debugger-api_app_container

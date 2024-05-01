@@ -31,10 +31,8 @@ func (c *Controller) DeleteData(ctx context.Context) http.HandlerFunc {
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
-				"",
-				w,
-				r,
-			)
+				"api.data.delete.error",
+				w, r)
 			return
 		}
 
