@@ -2,16 +2,15 @@ package app
 
 import (
 	"debugger-api/internal/config"
-	controller "debugger-api/internal/controller/data"
-	dataController "debugger-api/internal/controller/data/implementation"
-	"debugger-api/internal/error/message"
-	messageSource "debugger-api/internal/error/message/implementation"
-	"debugger-api/internal/error/response"
-	responseHandler "debugger-api/internal/error/response/implementaion"
-	repository "debugger-api/internal/repository/data"
-	dataRepository "debugger-api/internal/repository/data/implementation"
-	service "debugger-api/internal/service/data"
-	dataService "debugger-api/internal/service/data/implementation"
+	"debugger-api/internal/controller"
+	dataController "debugger-api/internal/controller/data"
+	error2 "debugger-api/internal/error"
+	messageSource "debugger-api/internal/error/message"
+	responseHandler "debugger-api/internal/error/response"
+	"debugger-api/internal/repository"
+	dataRepository "debugger-api/internal/repository/data"
+	"debugger-api/internal/service"
+	dataService "debugger-api/internal/service/data"
 )
 
 type serviceProvider struct {
@@ -19,8 +18,8 @@ type serviceProvider struct {
 	dataService    service.Service
 	dataController controller.Controller
 	config         config.Config
-	errorHandler   response.Handler
-	messageSource  message.Source
+	errorHandler   error2.Handler
+	messageSource  error2.Source
 }
 
 func newServiceProvider() *serviceProvider {
@@ -53,7 +52,7 @@ func (s *serviceProvider) DataController() controller.Controller {
 	return s.dataController
 }
 
-func (s *serviceProvider) ErrorHandler() response.Handler {
+func (s *serviceProvider) ErrorHandler() error2.Handler {
 	if s.errorHandler == nil {
 		s.errorHandler = responseHandler.NewErrorResponseHandler(s.MessageSource())
 	}
@@ -61,7 +60,7 @@ func (s *serviceProvider) ErrorHandler() response.Handler {
 	return s.errorHandler
 }
 
-func (s *serviceProvider) MessageSource() message.Source {
+func (s *serviceProvider) MessageSource() error2.Source {
 	if s.messageSource == nil {
 		s.messageSource = messageSource.NewMessageSource()
 	}

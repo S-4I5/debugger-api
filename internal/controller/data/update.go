@@ -1,32 +1,26 @@
-package implementation
+package data
 
 import (
 	"context"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	//"github.com/andybalholm/brotli"
-	_ "github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"io"
 	"net/http"
 )
 
-// GetData godoc
-// @Summary      Get data
-// @Description  Returns json by given key
+// UpdateData godoc
+// @Summary      Update data
+// @Description  Updates json by given key
 // @Tags         data
-// @Produce      json
+// @Accept 		 json
 // @Param        key   path      int  true  "Data key"
-// @Success      204
+// @Success      200
 // @Failure      400  {object}  error.ResponseDto
-// @Failure      404  {object}  error.ResponseDto
-// @Router       /data/{id} [get]
-func (c *Controller) GetData(ctx context.Context) http.HandlerFunc {
+// @Router       /data/{id} [put]
+func (c *Controller) UpdateData(cxt context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const op = "controller/get"
-
-		if c.errorHandler == nil {
-			fmt.Println("XD")
-		}
+		const op = "controller/update"
 
 		key := chi.URLParam(r, "key")
 		if key == "" {
@@ -34,17 +28,21 @@ func (c *Controller) GetData(ctx context.Context) http.HandlerFunc {
 			return
 		}
 
-		data, err := c.dataService.Get(ctx, key)
+		requestToString, err := io.ReadAll(r.Body)
+		if err != nil {
+			c.errorHandler.HandleIncorrectRequestBodyError(fmt.Errorf(op+":"+err.Error()), w, r)
+			return
+		}
+
+		err = c.dataService.Update(cxt, string(requestToString), key)
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
-				"api.data.get.error",
+				"api.data.update.error",
 				w, r)
 			return
 		}
 
 		render.Status(r, 200)
-		render.JSON(w, r, data)
-		return
 	}
 }

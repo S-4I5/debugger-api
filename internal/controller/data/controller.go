@@ -1,13 +1,18 @@
 package data
 
 import (
-	"context"
-	"net/http"
+	error2 "debugger-api/internal/error"
+	"debugger-api/internal/service"
 )
 
-type Controller interface {
-	PostData(cxt context.Context) http.HandlerFunc
-	GetData(ctx context.Context) http.HandlerFunc
-	UpdateData(cxt context.Context) http.HandlerFunc
-	DeleteData(ctx context.Context) http.HandlerFunc
+type Controller struct {
+	dataService  service.Service
+	errorHandler error2.Handler
+}
+
+func NewDataController(dataService service.Service, errorHandler error2.Handler) *Controller {
+	return &Controller{
+		dataService:  dataService,
+		errorHandler: errorHandler,
+	}
 }
