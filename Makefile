@@ -7,10 +7,11 @@ install-go-deps:
 	go get github.com/swaggo/http-swagger/v2
 	go get github.com/swaggo/swag
 	go get gopkg.in/kothar/brotli-go.v0
-
-generate:
-	mkdir -p docs/swagger
-	make generate-swagger
+	go get github.com/go-redis/redis/v8
+	go get github.com/pressly/goose/v3/cmd/goose@latest
+	go get github.com/jackc/pgx/v5/stdlib
+	go get github.com/Masterminds/squirrel
+	go get github.com/stretchr/testify/require
 
 generate-swagger:
 	swag init -d cmd

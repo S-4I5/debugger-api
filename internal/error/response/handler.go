@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-type Handler struct {
+type handler struct {
 	error2.Source
 }
 
-func NewErrorResponseHandler(source error2.Source) *Handler {
-	return &Handler{source}
+func NewErrorResponseHandler(source error2.Source) *handler {
+	return &handler{source}
 }
 
-func (h *Handler) HandleBusinessError(er error, errorMessage string, w http.ResponseWriter, r *http.Request) {
+func (h *handler) HandleBusinessError(er error, errorMessage string, w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, 400)
 	render.JSON(w, r,
@@ -29,7 +29,7 @@ func (h *Handler) HandleBusinessError(er error, errorMessage string, w http.Resp
 	return
 }
 
-func (h *Handler) HandleIncorrectRequestBodyError(er error, w http.ResponseWriter, r *http.Request) {
+func (h *handler) HandleIncorrectRequestBodyError(er error, w http.ResponseWriter, r *http.Request) {
 
 	errorMessage := "api.request.body.incorrect"
 
@@ -46,7 +46,7 @@ func (h *Handler) HandleIncorrectRequestBodyError(er error, w http.ResponseWrite
 	return
 }
 
-func (h *Handler) HandleIncorrectRequestParamError(er error, w http.ResponseWriter, r *http.Request) {
+func (h *handler) HandleIncorrectRequestParamError(er error, w http.ResponseWriter, r *http.Request) {
 
 	errorMessage := "api.request.param.incorrect"
 

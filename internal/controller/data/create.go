@@ -2,8 +2,8 @@ package data
 
 import (
 	"context"
+	"debugger-api/internal/model"
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"io"
 	"net/http"
@@ -17,17 +17,11 @@ import (
 // @Param        key   path      int  true  "Data key"
 // @Success      200
 // @Failure      400  {object}  error.ResponseDto
-// @Router       /data/{id} [post]
-func (c *Controller) PostData(cxt context.Context) http.HandlerFunc {
+// @Router       /data [post]
+func (c *controller) PostData(cxt context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		const op = "controller/post"
-
-		key := chi.URLParam(r, "key")
-		if key == "" {
-			c.errorHandler.HandleIncorrectRequestParamError(fmt.Errorf(op), w, r)
-			return
-		}
 
 		requestToString, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -35,7 +29,7 @@ func (c *Controller) PostData(cxt context.Context) http.HandlerFunc {
 			return
 		}
 
-		err = c.dataService.Create(cxt, string(requestToString), key)
+		id, err := c.dataService.Create(cxt, string(requestToString))
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),
@@ -44,6 +38,7 @@ func (c *Controller) PostData(cxt context.Context) http.HandlerFunc {
 			return
 		}
 
+		render.JSON(w, r, model.PostResponse{Id: id})
 		render.Status(r, 200)
 	}
 }

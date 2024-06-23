@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/google/uuid"
 	"net/http"
 )
 
@@ -17,17 +18,18 @@ import (
 // @Failure      400  {object}  error.ResponseDto
 // @Failure      404  {object}  error.ResponseDto
 // @Router       /data/{id} [delete]
-func (c *Controller) DeleteData(ctx context.Context) http.HandlerFunc {
+func (c *controller) DeleteData(ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "controller/delete"
 
 		key := chi.URLParam(r, "key")
-		if key == "" {
+		id, err := uuid.Parse(key)
+		if err != nil {
 			c.errorHandler.HandleIncorrectRequestParamError(fmt.Errorf(op), w, r)
 			return
 		}
 
-		err := c.dataService.Delete(ctx, key)
+		err = c.dataService.Delete(ctx, id)
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),

@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 )
 
-func (s *Service) Get(ctx context.Context, key string) (map[string]string, error) {
+func (s *service) Get(ctx context.Context, id uuid.UUID) (map[string]string, error) {
 	const op = "service/get"
 
-	data, err := s.dataRepository.Get(ctx, key)
+	data, err := s.dataRepository.Get(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf(op+": Cannot get data: %v\n", err)
 	}

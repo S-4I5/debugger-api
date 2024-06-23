@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"github.com/google/uuid"
 	"io"
 	"net/http"
 )
@@ -18,12 +19,13 @@ import (
 // @Success      200
 // @Failure      400  {object}  error.ResponseDto
 // @Router       /data/{id} [put]
-func (c *Controller) UpdateData(cxt context.Context) http.HandlerFunc {
+func (c *controller) UpdateData(cxt context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "controller/update"
 
 		key := chi.URLParam(r, "key")
-		if key == "" {
+		id, err := uuid.Parse(key)
+		if err != nil {
 			c.errorHandler.HandleIncorrectRequestParamError(fmt.Errorf(op), w, r)
 			return
 		}
@@ -34,7 +36,7 @@ func (c *Controller) UpdateData(cxt context.Context) http.HandlerFunc {
 			return
 		}
 
-		err = c.dataService.Update(cxt, string(requestToString), key)
+		err = c.dataService.Update(cxt, string(requestToString), id)
 		if err != nil {
 			c.errorHandler.HandleBusinessError(
 				fmt.Errorf(op+":"+err.Error()),

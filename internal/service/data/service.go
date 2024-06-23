@@ -5,14 +5,14 @@ import (
 	def "debugger-api/internal/service"
 )
 
-var _ def.Service = (*Service)(nil)
+var _ def.Service = (*service)(nil)
 
-type Service struct {
+type service struct {
 	dataRepository repository.Repository
 }
 
-func NewDataService(dataRepository repository.Repository) *Service {
-	return &Service{
+func NewDataService(dataRepository repository.Repository) *service {
+	return &service{
 		dataRepository: dataRepository,
 	}
 }

@@ -1,7 +1,14 @@
 http_server:
   timeout: 4s
   idle_timeout: 60s
-  name: "auth-server"
   api_prefix: "/api/v1"
   host: ""
   port: "8080"
+storage:
+  source: "postgres"
+  redis-config:
+    address: "localhost:6379"
+  postgres:
+    address: "localhost:5432"
+    username: "postgres"
+    password: "password"
