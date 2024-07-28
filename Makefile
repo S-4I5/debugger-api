@@ -12,6 +12,7 @@ install-go-deps:
 	go get github.com/jackc/pgx/v5/stdlib
 	go get github.com/Masterminds/squirrel
 	go get github.com/stretchr/testify/require
+	go get github.com/go-playground/validator/v10
 
 generate-swagger:
 	swag init -d cmd

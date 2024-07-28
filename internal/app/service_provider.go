@@ -4,42 +4,70 @@ import (
 	"context"
 	"debugger-api/internal/config"
 	"debugger-api/internal/controller"
-	dataController "debugger-api/internal/controller/data"
-	error2 "debugger-api/internal/error"
-	messageSource "debugger-api/internal/error/message"
-	responseHandler "debugger-api/internal/error/response"
+	dataController "debugger-api/internal/controller/mock"
+	"debugger-api/internal/httperr"
+	error2 "debugger-api/internal/httperr"
+	"debugger-api/internal/middleware"
+	"debugger-api/internal/middleware/compressor"
+	"debugger-api/internal/middleware/fullurl"
+	"debugger-api/internal/middleware/requestid"
 	"debugger-api/internal/repository"
-	"debugger-api/internal/repository/data/local"
-	redis2 "debugger-api/internal/repository/data/postgres"
-	"debugger-api/internal/repository/data/redis"
+	"debugger-api/internal/repository/mock/local"
+	redis2 "debugger-api/internal/repository/mock/postgres"
+	"debugger-api/internal/repository/mock/redis"
 	"debugger-api/internal/service"
-	dataService "debugger-api/internal/service/data"
+	dataService "debugger-api/internal/service/mock"
 	"debugger-api/internal/util/properties"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	redis3 "github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type serviceProvider struct {
-	dataRepository repository.Repository
-	dataService    service.Service
-	dataController controller.Controller
-	config         config.Config
-	errorHandler   error2.Handler
-	messageSource  error2.Source
+	dataRepository                   repository.MockRepository
+	dataService                      service.MockService
+	dataController                   controller.MockController
+	requestIdMiddlewareProvider      middleware.RequestIdMiddlewareProvider
+	fullRequestUrlMiddlewareProvider middleware.FullRequestUrlMiddlewareProvider
+	compressorMiddlewareProvider     middleware.CompressorMiddlewareProvider
+	config                           config.Config
+	errorHandler                     error2.Handler
+	messageSource                    error2.Source
 }
 
-func newServiceProvider() *serviceProvider {
+func newServiceProvider(cfg config.Config) *serviceProvider {
 	return &serviceProvider{
-		config: config.MustLoad("./config/config.yaml"),
+		config: cfg,
 	}
 }
 
-func (s *serviceProvider) DataRepository() repository.Repository {
+func (s *serviceProvider) CompressorMiddlewareProvider() middleware.CompressorMiddlewareProvider {
+	if s.compressorMiddlewareProvider == nil {
+		s.compressorMiddlewareProvider = compressor.NewMiddlewareProvider()
+	}
+	return s.compressorMiddlewareProvider
+}
+
+func (s *serviceProvider) FullRequestUrlMiddlewareProvider() middleware.FullRequestUrlMiddlewareProvider {
+	if s.fullRequestUrlMiddlewareProvider == nil {
+		s.fullRequestUrlMiddlewareProvider = fullurl.NewMiddlewareProvider()
+	}
+	return s.fullRequestUrlMiddlewareProvider
+}
+
+func (s *serviceProvider) RequestIdMiddlewareProvider() middleware.RequestIdMiddlewareProvider {
+	if s.requestIdMiddlewareProvider == nil {
+		s.requestIdMiddlewareProvider = requestid.NewMiddlewareProvider()
+	}
+	return s.requestIdMiddlewareProvider
+}
+
+func (s *serviceProvider) DataRepository() repository.MockRepository {
 	if s.dataRepository == nil {
 		switch s.config.StorageConfig.Source {
 		case config.Local:
-			s.dataRepository = local.NewLocalRepository()
+			s.dataRepository = local.NewRepository()
 			break
 		case config.Redis:
 			redisConfig := &redis3.Options{
@@ -57,7 +85,7 @@ func (s *serviceProvider) DataRepository() repository.Repository {
 
 			client := redis3.NewClient(redisConfig)
 
-			s.dataRepository = redis.NewRedisRepository(client)
+			s.dataRepository = redis.NewRepository(client)
 			break
 		case config.Postgres:
 			pool, err := pgxpool.New(context.Background(), fmt.Sprintf("postgres://%s:%s@%s/%s",
@@ -70,7 +98,7 @@ func (s *serviceProvider) DataRepository() repository.Repository {
 				panic("cannot create pgx pool")
 			}
 
-			s.dataRepository = redis2.NewPostgresRepository(pool)
+			s.dataRepository = redis2.NewRepository(pool)
 			break
 		default:
 			panic("incorrect storage type")
@@ -80,7 +108,7 @@ func (s *serviceProvider) DataRepository() repository.Repository {
 	return s.dataRepository
 }
 
-func (s *serviceProvider) DataService() service.Service {
+func (s *serviceProvider) DataService() service.MockService {
 	if s.dataService == nil {
 		s.dataService = dataService.NewDataService(s.DataRepository())
 	}
@@ -88,17 +116,16 @@ func (s *serviceProvider) DataService() service.Service {
 	return s.dataService
 }
 
-func (s *serviceProvider) DataController() controller.Controller {
+func (s *serviceProvider) DataController() controller.MockController {
 	if s.dataController == nil {
-		s.dataController = dataController.NewDataController(s.DataService(), s.ErrorHandler())
+		s.dataController = dataController.NewController(s.DataService(), s.ErrorHandler(), *validator.New(validator.WithRequiredStructEnabled()))
 	}
-
 	return s.dataController
 }
 
 func (s *serviceProvider) ErrorHandler() error2.Handler {
 	if s.errorHandler == nil {
-		s.errorHandler = responseHandler.NewErrorResponseHandler(s.MessageSource())
+		s.errorHandler = httperr.NewErrorResponseHandler(s.MessageSource())
 	}
 
 	return s.errorHandler
@@ -111,7 +138,7 @@ func (s *serviceProvider) MessageSource() error2.Source {
 			panic("cannot read messages properties: " + err.Error())
 		}
 
-		s.messageSource = messageSource.NewMessageSource(messages)
+		s.messageSource = httperr.NewMessageSource(messages)
 	}
 
 	return s.messageSource

@@ -2,12 +2,14 @@ package repository
 
 import (
 	"context"
+	"debugger-api/internal/model"
+	"debugger-api/internal/model/entity"
 	"github.com/google/uuid"
 )
 
-type Repository interface {
-	Create(_ context.Context, data string) (uuid.UUID, error)
-	Delete(_ context.Context, id uuid.UUID) error
-	Update(_ context.Context, data string, id uuid.UUID) error
-	Get(_ context.Context, id uuid.UUID) (string, error)
+type MockRepository interface {
+	Save(ctx context.Context, mock entity.Mock) (entity.Mock, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+	UpdateContent(ctx context.Context, json model.Json, id uuid.UUID) error
+	Get(ctx context.Context, id uuid.UUID) (entity.Mock, error)
 }

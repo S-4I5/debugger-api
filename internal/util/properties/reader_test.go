@@ -1,12 +1,13 @@
-package properties
+package properties_test
 
 import (
+	"debugger-api/internal/util/properties"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
 
 func TestReadProperties(t *testing.T) {
-	actual, err := ReadProperties(".//test//testReadProperties.properties")
+	actual, err := properties.ReadProperties(".//test//testReadProperties.properties")
 
 	expected := map[string]string{
 		"something.like.this":      "and like this",
@@ -19,7 +20,7 @@ func TestReadProperties(t *testing.T) {
 }
 
 func TestReadPropertiesWithIncorrectPropertiesFormat(t *testing.T) {
-	_, err := ReadProperties(".//test2//TestReadPropertiesWithIncorrectPropertiesFormat.properties")
+	_, err := properties.ReadProperties(".//test2//TestReadPropertiesWithIncorrectPropertiesFormat.properties")
 
 	require.Error(t, err)
 }

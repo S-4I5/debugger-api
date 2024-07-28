@@ -7,8 +7,8 @@ http_server:
 storage:
   source: "postgres"
   redis-config:
-    address: "localhost:6379"
+    address: "postgres:6379"
   postgres:
-    address: "localhost:5432"
+    address: "postgres:5432"
     username: "postgres"
     password: "password"

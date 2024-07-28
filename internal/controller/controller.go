@@ -5,9 +5,10 @@ import (
 	"net/http"
 )
 
-type Controller interface {
-	PostData(cxt context.Context) http.HandlerFunc
-	GetData(ctx context.Context) http.HandlerFunc
-	UpdateData(cxt context.Context) http.HandlerFunc
-	DeleteData(ctx context.Context) http.HandlerFunc
+type MockController interface {
+	PostMock(cxt context.Context) http.HandlerFunc
+	GetMock(ctx context.Context) http.HandlerFunc
+	UpdateMock(cxt context.Context) http.HandlerFunc
+	DeleteMock(ctx context.Context) http.HandlerFunc
+	GetMockContent(ctx context.Context) http.HandlerFunc
 }
