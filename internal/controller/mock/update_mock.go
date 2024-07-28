@@ -14,10 +14,10 @@ const errorUpdateMock = "error while trying to update mock content"
 
 // UpdateMock godoc
 // @Summary      Update mock
-// @Description  Updates json by given key
+// @Description  Updates mock by given id
 // @Tags         mock
 // @Accept 		 json
-// @Param        key   path      int  true  "Data key"
+// @Param        key   path      int  true  "Mock id"
 // @Success      200
 // @Failure      400  {object}  httperr.ResponseDto
 // @Router       /mock/{id} [put]

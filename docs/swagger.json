@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Api for http debugging",
+        "description": "Mock api for http debugging",
         "title": "Debugger api",
         "contact": {},
         "version": "1.0"

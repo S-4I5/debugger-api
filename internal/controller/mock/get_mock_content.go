@@ -10,6 +10,15 @@ import (
 
 const errorGetMockContent = "error while trying to get mock content"
 
+// GetMockContent godoc
+// @Summary      Get mock content
+// @Description  Returns mock content as json
+// @Tags         mock
+// @Produce      json
+// @Param        key   path      int  true  "Data key"
+// @Success      204
+// @Failure      400  {object}  httperr.ResponseDto
+// @Router       /mock/{id} [get]
 func (c *controller) GetMockContent(ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "controller/get_mock_content"

@@ -13,10 +13,10 @@ const errorPostMock = "error while trying to create mock content"
 
 // PostMock godoc
 // @Summary      Creates mock source
-// @Description  Stores json by given key
+// @Description  Stores json by given id
 // @Tags         mock
 // @Accept       json
-// @Param        key   path      int  true  "Data key"
+// @Param        key   path      int  true  "Mock id"
 // @Success      200
 // @Failure      400  {object}  httperr.ResponseDto
 // @Router       /mock [post]

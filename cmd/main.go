@@ -11,33 +11,9 @@ import (
 
 // @title Debugger api
 // @version 1.0
-// @description Api for http debugging
+// @description Mock api for http debugging
 // @BasePath /api/v1
-
 func main() {
-
-	//	var dev map[string]interface{}
-	//	err := json.Unmarshal([]byte(`{
-	//  "id": 123,
-	//  "name": "GoLinux Cloud",
-	//  "address": {
-	//    "street": "Summer",
-	//    "city": "San Jose"
-	//  },
-	//  "phoneNumber": 1234567890,
-	//  "role": "Admin",
-	//  "someField": "unstructed"
-	//}`), &dev)
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//
-	//	fmt.Println(dev)
-	//
-	//	str, _ := json.Marshal(dev)
-	//
-	//	fmt.Println(string(str))
-
 	ctx := context.Background()
 
 	cfg := config.MustLoad("./config/config.yaml")

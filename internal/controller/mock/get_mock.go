@@ -21,7 +21,6 @@ const errorGetMock = "error while trying to get mock"
 // @Param        key   path      int  true  "Data key"
 // @Success      204
 // @Failure      400  {object}  httperr.ResponseDto
-// @Failure      404  {object}  httperr.ResponseDto
 // @Router       /mock/{id} [get]
 func (c *controller) GetMock(ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
